@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        const asiacountries = document.getElementById("asiacountries");
+
+        const getFlags = () => {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://raw.githubusercontent.com/rvsp/restcountries-json-data/master/res-countries.json");
+            xhr.responseType = "json";
+            xhr.onload = () => {
+                const flags = xhr.response;
+
+                // to get the retrieved data.
+                console.log(flags);
+
+                // to get the data in asia continent
+                const asiaCountries = flags.filter(fl => fl.region === "Asia");
+                console.log(asiaCountries);
+
+                // to get the population less than 2 lakhs
+                const population = flags.filter(fl => fl.population < 200000);
+                console.log(population);
+
+                // to get the list of countries flags, names and capital
+                 for (var index of flags) {
+                        document.body.innerHTML += `
+                            <div>
+                                <img src= ${index.flag}/>
+                                <h1> Country Name : ${index.name}</h1>
+                                <p> Capital Name : ${index.capital}</p>
+                            </div>`;
+                    }
+
+                // to get the total population of all countries using reduce method
+                const totalPopulation = flags.reduce((a, c) => a + c.population, 0);
+                console.log(totalPopulation);
+
+                // to get countries which use USD as currency
+                for(i=0;i<flags.length;i++){
+                    for(j=0;j<flags[i].currencies.length;j++){
+                        if(flags[i].currencies[j].code === "USD"){
+                            console.log(flags[i].name, flags[i].currencies[j].code);
+                        }    
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        getFlags();
+
+    </script>
+
+</body>
+
+</html>
